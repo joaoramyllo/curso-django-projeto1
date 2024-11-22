@@ -3,21 +3,37 @@ from django.contrib.auth.models import User
 
 
 class RegisterForm(forms.ModelForm):
-    username = forms.CharField(max_length=100)
-    email = forms.EmailField()
-    password = forms.CharField(widget=forms.PasswordInput)
-    confirm_password = forms.CharField(widget=forms.PasswordInput)
-
-    class Meta:  # used to pass metadata to the model
+    class Meta:
         model = User
-        fields = ["username", "email", "password", "confirm_password"]
-
-    def clean(self):
-        cleaned_data = super(RegisterForm, self).clean()
-        password = cleaned_data.get("password")
-        confirm_password = cleaned_data.get("confirm_password")
-
-        if password != confirm_password:
-            raise forms.ValidationError("Passwords do not match")
-
-        return cleaned_data
+        fields = [
+            'first_name',
+            'last_name',
+            'username',
+            'email',
+            'password',
+        ]
+        
+        labels = {
+            'username': 'Username',
+            'first_name': 'First name',
+            'last_name': 'Last name',
+            'email': 'E-mail',
+            'password': 'Password',
+        }
+        help_texts = {
+            'email': 'The e-mail must be valid.',
+        }
+        error_messages = {
+            'username': {
+                'required': 'This field must not be empty',
+            }
+        }
+        widgets = {
+            'first_name': forms.TextInput(attrs={
+                'placeholder': 'Type your username here',
+                'class': 'input text-input'
+            }),
+            'password': forms.PasswordInput(attrs={
+                'placeholder': 'Type your password here'
+            })
+        }

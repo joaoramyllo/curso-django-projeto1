@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_list_or_404, get_object_or_404
 from django.http import Http404
+from django.contrib import messages
 
 from utils.recipes.factory import make_recipe
 from .models import Recipe
@@ -13,6 +14,7 @@ def home(request):
             is_published=True,
         ).order_by('-id')
     )
+
     return render(request, 'recipes/pages/home.html', context={'recipes': recipes,})
 
 def recipe(request, id):
@@ -34,6 +36,9 @@ def category(request, category_id):
     return render(request, 'recipes/pages/category.html', context = { 
         'recipes': recipes, 'title' : f'{recipes[0].category.name} - Category | ' }
         )
+
+def search(request):
+    return render(request, 'recipes/pages/search.html') 
 
 
 
